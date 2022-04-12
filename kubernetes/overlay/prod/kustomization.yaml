@@ -1,0 +1,138 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: prd-kakeibo
+secretGenerator:
+- name: docker-registry
+  files:
+   - '.dockerconfigjson=docker-registry.json'
+  type: kubernetes.io/dockerconfigjson
+- name: kustomize-password
+  files:
+  - password=password.txt
+bases:
+- ../../base
+transformers:
+- transformer-labels.yaml
+- transformer-suffixprefix.yaml
+resources:
+- configmap-django-variable01.yaml
+images:
+- name: frontend-app01
+  newName: abeyuki/django
+  newTag: "4.0.3"
+- name: backend-db01
+  newName: postgres
+  newTag: "13.5-bullseye"
+replicas:
+- name: frontend-app01
+  count: 1
+- name: backend-db01
+  count: 1
+patchesStrategicMerge:
+- |-
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: frontend-app01
+  spec:
+    accessModes:
+      - ReadWriteMany
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: longhorn
+    volumeMode: Filesystem
+- |-
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: backend-db01
+  spec:
+    accessModes:
+      - ReadWriteMany
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: longhorn
+    volumeMode: Filesystem
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: frontend-app01
+  spec:
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: django
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/name: django
+      spec:
+        containers:
+        - name: frontend-app01
+          command: ["/bin/bash", "-c"]
+          args:
+          - |
+            function Create (){
+              declare PJNAME=project \
+              && django-admin startproject $PJNAME . \
+              && sed -i -e "s/from django.utils.encoding import force_text/from django.utils.encoding import force_str/" /usr/local/lib/python3.8/site-packages/django_pandas/utils.py \
+              && sed -i -e "s/'ENGINE': 'django.db.backends.sqlite3',/'ENGINE': 'django.db.backends.postgresql',/" $PJNAME/settings.py \
+              && sed -i -e "s/'NAME': BASE_DIR \/ 'db.sqlite3',/'NAME': 'postgres',\n        'USER': 'postgres',\n        'PASSWORD': '$POSTGRES_PASSWORD',\n        'HOST': 'django-backend-db01-001',\n        'PORT': 5432,/" $PJNAME/settings.py \
+              && sed -i -e "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \['*'\]/" $PJNAME/settings.py
+            }
+            function Clone (){
+              git clone https://github.com/AbeYuki/kakeibo.git /code
+            }
+            function Module_Fix (){
+              sed -i -e "s/from django.utils.encoding import force_text/from django.utils.encoding import force_str/" /usr/local/lib/python3.8/site-packages/django_pandas/utils.py
+            }
+            function Runserver (){
+              python manage.py makemigrations \
+              && python manage.py migrate \
+              && python manage.py runserver 0.0.0.0:8000
+            }
+            function connection_check (){
+                while true; do
+                    if [ $(curl -m 1 django-backend-db01-001:5432 > /dev/null 2>&1 ;echo $?) -eq '52' ]; then
+                        echo 'connection ok'
+                        break
+                    else
+                        echo 'not connection' ;sleep 5
+                    fi
+                done 
+            }
+            function Create_Secret_Key () {
+            Secret_Key=$(python -c "
+            from django.core.management.utils import get_random_secret_key
+            print(get_random_secret_key())")
+            }
+            function setting_local_secret () {
+            cat <<EOF> /code/project/settings_local.py
+            SECRET_KEY = '$Secret_Key'
+            EOF
+            }
+            function settigs_local_database () {
+            cat <<EOF>> /code/project/settings_local.py
+            DATABASES = {
+                'default': {
+                    'ENGINE': 'django.db.backends.postgresql',
+                    'NAME': '$POSTGRES_NAME',
+                    'USER': '$POSTGRES_USER',
+                    'PASSWORD': '$POSTGRES_PASSWORD',
+                    'HOST': 'django-backend-db01-001',
+                    'PORT': 5432,
+                }
+            }
+            EOF
+            }
+            if [ ! -f /code/manage.py ]; then 
+                Clone \
+                && Create_Secret_Key \
+                && setting_local_secret \
+                && settigs_local_database \
+                && connection_check \
+                && Module_Fix \
+                && Runserver
+            fi

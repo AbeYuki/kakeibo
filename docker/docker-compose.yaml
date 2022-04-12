@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  django-backend-db01-001:
+    image: postgres:13.5-bullseye
+    volumes:
+      - kakeibo_backend:/var/lib/postgresql/data
+    env_file:
+      - .env
+  web:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    command: >
+      bash -c "
+        sed -i -e 's/from django.utils.encoding import force_text/from django.utils.encoding import force_str/' /usr/local/lib/python3.8/site-packages/django_pandas/utils.py
+        git clone https://github.com/AbeYuki/kakeibo.git /codetmp
+        cp -ra /codetmp/* /code
+        /tmp/local_settings.sh
+        python /code/manage.py makemigrations 
+        python /code/manage.py migrate 
+        python /code/manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - kakeibo_frontend:/code
+    ports:
+      - "8080:8000"
+    depends_on:
+      - django-backend-db01-001
+volumes:
+  kakeibo_backend:
+  kakeibo_frontend:
