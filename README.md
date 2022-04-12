@@ -1,7 +1,7 @@
 # 家計簿 web app 
+![kakeibo UI](./kakeibo-ui.png)
 
 ## はじめに
-README.md ファイルがある場所へ移動
 シークレットを含んだファイル(★add/★fix)の追加・修正を行い deploy する流れ  
 cat リダイレクトでファイル作成例としているが、エディタでの作成を推奨  
 ```
