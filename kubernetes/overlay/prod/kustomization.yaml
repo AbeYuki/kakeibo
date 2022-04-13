@@ -74,14 +74,6 @@ patchesStrategicMerge:
           command: ["/bin/bash", "-c"]
           args:
           - |
-            function Create (){
-              declare PJNAME=project \
-              && django-admin startproject $PJNAME . \
-              && sed -i -e "s/from django.utils.encoding import force_text/from django.utils.encoding import force_str/" /usr/local/lib/python3.8/site-packages/django_pandas/utils.py \
-              && sed -i -e "s/'ENGINE': 'django.db.backends.sqlite3',/'ENGINE': 'django.db.backends.postgresql',/" $PJNAME/settings.py \
-              && sed -i -e "s/'NAME': BASE_DIR \/ 'db.sqlite3',/'NAME': 'postgres',\n        'USER': 'postgres',\n        'PASSWORD': '$POSTGRES_PASSWORD',\n        'HOST': 'django-backend-db01-001',\n        'PORT': 5432,/" $PJNAME/settings.py \
-              && sed -i -e "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \['*'\]/" $PJNAME/settings.py
-            }
             function Clone (){
               git clone https://github.com/AbeYuki/kakeibo.git /code
             }
@@ -95,7 +87,7 @@ patchesStrategicMerge:
             }
             function connection_check (){
                 while true; do
-                    if [ $(curl -m 1 django-backend-db01-001:5432 > /dev/null 2>&1 ;echo $?) -eq '52' ]; then
+                    if [ $(curl -m 1 $(env | grep BACKEND | grep SERVICE_HOST | awk -F '=' '{print $2}'):5432 > /dev/null 2>&1 ;echo $?) -eq '52' ]; then
                         echo 'connection ok'
                         break
                     else
@@ -114,14 +106,15 @@ patchesStrategicMerge:
             EOF
             }
             function settigs_local_database () {
-            cat <<EOF>> /code/project/settings_local.py
+            POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//') \
+            && cat <<EOF>> /code/project/settings_local.py
             DATABASES = {
                 'default': {
                     'ENGINE': 'django.db.backends.postgresql',
                     'NAME': '$POSTGRES_NAME',
                     'USER': '$POSTGRES_USER',
                     'PASSWORD': '$POSTGRES_PASSWORD',
-                    'HOST': 'django-backend-db01-001',
+                    'HOST': '$POSTGRES_HOST',
                     'PORT': 5432,
                 }
             }
