@@ -78,7 +78,7 @@ patchesStrategicMerge:
               git clone https://github.com/AbeYuki/kakeibo.git /code
             }
             function Module_Fix (){
-              sed -i -e "s/from django.utils.encoding import force_text/from django.utils.encoding import force_str/" /usr/local/lib/python3.8/site-packages/django_pandas/utils.py
+              sed -i -e 's/force_text/force_str/' /usr/local/lib/python3.8/site-packages/django_pandas/utils.py
             }
             function Runserver (){
               python manage.py makemigrations \
