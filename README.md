@@ -176,3 +176,61 @@ cat <<'EOF'> docker-registry.json
 {"auths":{"registry.gitlab.com":{"username":"user","password":"pass","auth":"dXNlcjpwYXNz"}}}
 EOF
 ```
+
+<br>
+<br>
+<br>
+
+## 使い方
+### 1. コンテナ内で以下コマンドを実行し、スーパーユーザを作成  
+```bash
+python manage.py createsuperuser
+```
+  
+![kakeibo ex1](./docs/example/example1.png)  
+
+<br>
+
+### 2. 管理サイトへログイン(/admin)  
+![kakeibo ex2](./docs/example/example2.png)  
+
+<br>
+
+### 3. 管理サイトの Payment categorys (支出)から支出のカテゴリーを作成  
+![kakeibo ex3](./docs/example/example3.png)  
+
+<br>
+
+![kakeibo ex4](./docs/example/example4.png)  
+
+<br>
+
+![kakeibo ex5](./docs/example/example5.png)  
+
+<br>
+
+![kakeibo ex6](./docs/example/example6.png)  
+  
+Income categorys (収入)も同様にカテゴリーを作成    
+
+<br>
+
+### 4. コンテナから migrate 実行  
+```
+python manage.py migrate
+```
+![kakeibo ex7](./docs/example/example7.png)
+
+<br>
+
+
+### 5. 家計簿アプリから支出登録
+![kakeibo ex8](./docs/example/example8.png)
+
+<br>
+
+![kakeibo ex9](./docs/example/example9.png)
+
+<br>
+
+![kakeibo ex9](./docs/example/example10.png)
