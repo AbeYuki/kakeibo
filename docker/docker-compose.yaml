@@ -15,7 +15,7 @@ services:
       - .env
     command: >
       bash -c "
-        sed -i -e 's/from django.utils.encoding import force_text/from django.utils.encoding import force_str/' /usr/local/lib/python3.8/site-packages/django_pandas/utils.py
+        sed -i -e 's/force_text/force_str/' /usr/local/lib/$$(python --version | cut -d '.' -f 1,2 | tr 'A-Z' 'a-z' | tr -d ' ')/site-packages/django_pandas/utils.py
         git clone https://github.com/AbeYuki/kakeibo.git /codetmp
         cp -ra /codetmp/* /code
         /tmp/local_settings.sh
