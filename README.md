@@ -1,5 +1,5 @@
 # 家計簿 web app 
-![kakeibo UI](./kakeibo-ui.png)
+![kakeibo UI](./docs/example/kakeibo-ui.png)
 
 ## はじめに
 シークレットを含んだファイル(★add/★fix)の追加・修正を行い deploy する流れ  
