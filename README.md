@@ -118,9 +118,7 @@ cd kuberentes/kakeibo/kubernetes/overlay/dev/
 ```
 ### kustomize.yaml setup
 ```bash
-cat <<EOF> password.txt
-password
-EOF
+echo -n 'password' > password.txt
 ```
 
 ### kustomization.yaml の patchesStrategicMerge を修正して storageclass,resources の調整
