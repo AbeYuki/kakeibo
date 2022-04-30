@@ -114,7 +114,7 @@ docker-compose up -d
 
 ## kubernetes の場合
 ```
-cd kuberentes/kakeibo/kubernetes/overlay/dev/
+cd kubernetes/overlay/dev/
 ```
 ### kustomize.yaml setup
 ```bash
