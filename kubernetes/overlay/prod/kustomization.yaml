@@ -1,14 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: prd-kakeibo
-secretGenerator:
+namespace: prod-kakeibo
+### Separated secret to use argocd ###
+#secretGenerator:
 #- name: docker-registry
 #  files:
 #   - '.dockerconfigjson=docker-registry.json'
 #  type: kubernetes.io/dockerconfigjson
-- name: kustomize-password
-  files:
-  - password=password.txt
+#- name: kustomize-password
+#  files:
+#  - password=password.txt
 bases:
 - ../../base
 transformers:

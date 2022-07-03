@@ -8,13 +8,33 @@ cat リダイレクトでファイル作成例としているが、エディタ�
 .
 ├── README.md
 ├── docker
-│   ├── .env ★add
 │   ├── Dockerfile
 │   ├── docker-compose.yaml
+│   ├── local_settings.sh
 │   └── requirements.txt
 ├── kakeibo
 │   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── __init__.cpython-38.pyc
+│   │   ├── admin.cpython-310.pyc
+│   │   ├── admin.cpython-38.pyc
+│   │   ├── apps.cpython-310.pyc
+│   │   ├── apps.cpython-38.pyc
+│   │   ├── forms.cpython-310.pyc
+│   │   ├── forms.cpython-38.pyc
+│   │   ├── models.cpython-310.pyc
+│   │   ├── models.cpython-38.pyc
+│   │   ├── plugin_plotly.cpython-310.pyc
+│   │   ├── plugin_plotly.cpython-38.pyc
+│   │   ├── seaborn_colorpalette.cpython-310.pyc
+│   │   ├── seaborn_colorpalette.cpython-38.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   ├── urls.cpython-38.pyc
+│   │   ├── views.cpython-310.pyc
+│   │   ├── views.cpython-38.pyc
+│   │   ├── widgets.cpython-310.pyc
+│   │   └── widgets.cpython-38.pyc
 │   ├── admin.py
 │   ├── apps.py
 │   ├── forms.py
@@ -22,6 +42,10 @@ cat リダイレクトでファイル作成例としているが、エディタ�
 │   │   ├── 0001_initial.py
 │   │   ├── __init__.py
 │   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-310.pyc
+│   │       ├── 0001_initial.cpython-38.pyc
+│   │       ├── __init__.cpython-310.pyc
+│   │       └── __init__.cpython-38.pyc
 │   ├── models.py
 │   ├── my_context_processor.py
 │   ├── plugin_plotly.py
@@ -45,6 +69,8 @@ cat リダイレクトでファイル作成例としているが、エディタ�
 │   │           └── custom_radio_option.html
 │   ├── templatetags
 │   │   ├── __pycache__
+│   │   │   ├── kakeibo.cpython-310.pyc
+│   │   │   └── kakeibo.cpython-38.pyc
 │   │   └── kakeibo.py
 │   ├── tests.py
 │   ├── urls.py
@@ -58,40 +84,71 @@ cat リダイレクトでファイル作成例としているが、エディタ�
 │   └── overlay
 │       ├── dev
 │       │   ├── configmap-django-variable01.yaml
-│       │   ├── docker-registry.json ★add※
-│       │   ├── kustomization.yaml ★fix
+│       │   ├── docker-registry.json
+│       │   ├── kustomization.yaml
 │       │   ├── namespace.yaml
-│       │   ├── password.txt ★add
+│       │   ├── password.txt
 │       │   ├── transformer-labels.yaml
 │       │   └── transformer-suffixprefix.yaml
 │       └── prod
 │           ├── configmap-django-variable01.yaml
-│           ├── docker-registry.json ★add※
-│           ├── kustomization.yaml ★fix
+│           ├── docker-registry.json
+│           ├── kustomization.yaml
 │           ├── namespace.yaml
-│           ├── password.txt ★add
+│           ├── password.txt
+│           ├── secret
+│           │   ├── docker-registry.json
+│           │   ├── kustomization.yaml
+│           │   └── password.txt
 │           ├── transformer-labels.yaml
 │           └── transformer-suffixprefix.yaml
 ├── manage.py
 ├── project
 │   ├── __init__.py
 │   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── __init__.cpython-38.pyc
+│   │   ├── settings.cpython-310.pyc
+│   │   ├── settings.cpython-38.pyc
+│   │   ├── settings_local.cpython-310.pyc
+│   │   ├── settings_local.cpython-38.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   ├── urls.cpython-38.pyc
+│   │   └── wsgi.cpython-310.pyc
+│   ├── asgi.py
 │   ├── settings.py
+│   ├── settings_local.py
 │   ├── urls.py
 │   └── wsgi.py
 └── register
     ├── __init__.py
     ├── __pycache__
+    │   ├── __init__.cpython-310.pyc
+    │   ├── __init__.cpython-38.pyc
+    │   ├── admin.cpython-310.pyc
+    │   ├── admin.cpython-38.pyc
+    │   ├── apps.cpython-310.pyc
+    │   ├── apps.cpython-38.pyc
+    │   ├── models.cpython-310.pyc
+    │   └── models.cpython-38.pyc
     ├── admin.py
     ├── apps.py
     ├── migrations
     │   ├── 0001_initial.py
     │   ├── __init__.py
     │   └── __pycache__
+    │       ├── 0001_initial.cpython-310.pyc
+    │       ├── 0001_initial.cpython-38.pyc
+    │       ├── __init__.cpython-310.pyc
+    │       └── __init__.cpython-38.pyc
     ├── models.py
     ├── tests.py
-    └── views.py
+    └── views.py```
 ```
+
+<br>  
+<br>  
+<br>  
 
 ## docker-compose の場合
 ```
@@ -112,15 +169,17 @@ docker-compsoe build --no-cache
 docker-compose up -d
 ```
 
+<br>  
+<br>  
+<br>  
+
 ## kubernetes の場合
 ```
 cd kuberentes/kakeibo/kubernetes/overlay/dev/
 ```
 ### kustomize.yaml setup
 ```bash
-cat <<EOF> password.txt
-password
-EOF
+echo -n 'password' secret/password.txt
 ```
 
 ### kustomization.yaml の patchesStrategicMerge を修正して storageclass,resources の調整
@@ -140,14 +199,28 @@ patchesStrategicMerge:
     storageClassName: 調整
 ```
 
-### deploy
+<br>  
+<br>  
+<br>  
 
+### deploy
+namespace deploy  
 ```
 kubectl apply -f namespace.yaml
 ```
+secret deploy  
+※Gitops を考慮して secret を分離  
+```
+kubectl apply -k secret/
+```
+各オブジェクト deploy
 ```
 kubectl apply -k ./
 ```
+
+<br>  
+<br>  
+<br>  
 
 
 ## 備考
@@ -156,23 +229,23 @@ django のイメージはビルド済みを用意していますが、個人で�
 kustomization.yaml にある docker-registry のコメントアウトを解除してください。
 docker-registry のフォーマットは、"auth"Key の value は <ユーザー名:パスワード> を base64 でエンコードしたものです。
 
-```
+```json
 {"auths":{"registry.gitlab.com":{"username":"<ユーザ名>","password":"<パスワード>","auth":"<$(echo -n 'ユーザ名:パスワード' | base64)>"}}}
 ```
 
 例)
-```
+```bash
 echo -n 'user:pass' | base64
 dXNlcjpwYXNz
 ```
-```
+```json
 {"auths":{"registry.gitlab.com":{"username":"user","password":"pass","auth":"dXNlcjpwYXNz"}}}
 ```
 
 docker-registry.json作成
 
-```
-cat <<'EOF'> docker-registry.json
+```bash
+cat <<'EOF'> secret/docker-registry.json
 {"auths":{"registry.gitlab.com":{"username":"user","password":"pass","auth":"dXNlcjpwYXNz"}}}
 EOF
 ```
