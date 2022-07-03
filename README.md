@@ -175,11 +175,15 @@ docker-compose up -d
 
 ## kubernetes の場合
 ```
-cd kuberentes/kakeibo/kubernetes/overlay/dev/
+cd kubernetes/overlay/dev/
 ```
 ### kustomize.yaml setup
 ```bash
+<<<<<<< HEAD
 echo -n 'password' secret/password.txt
+=======
+echo -n 'password' > password.txt
+>>>>>>> b1f19d7b50bda400a591b597c07bdfc12ffd7292
 ```
 
 ### kustomization.yaml の patchesStrategicMerge を修正して storageclass,resources の調整

@@ -17,7 +17,7 @@ services:
       bash -c "
         sed -i -e 's/force_text/force_str/' /usr/local/lib/$$(python --version | cut -d '.' -f 1,2 | tr 'A-Z' 'a-z' | tr -d ' ')/site-packages/django_pandas/utils.py
         git clone https://github.com/AbeYuki/kakeibo.git /codetmp
-        cp -ra /codetmp/* /code
+        cp -a /codetmp/. /code
         /tmp/local_settings.sh
         python /code/manage.py makemigrations 
         python /code/manage.py migrate 
