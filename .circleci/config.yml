@@ -6,7 +6,7 @@ workflows:
     jobs:
 #      - runner-test
       - runner-test-1
-      - runner-test-2
+#      - runner-test-2
 jobs:
 #  runner-test:
 #    machine: true
@@ -14,6 +14,8 @@ jobs:
 #    steps:
 #      - run: echo "Hi I'm on Runners!" > $HOME/test.txt
   runner-test-1:
+    machine: true
+    resource_class: abeyuki/circleci
     docker:
       - image: 'cimg/base:stable'
     steps:
