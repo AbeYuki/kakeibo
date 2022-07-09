@@ -1,11 +1,26 @@
 version: 2.1
+orbs: 
+  kubernetes: circleci/kubernetes@1.3.0
 workflows:
   testing:
     jobs:
-      - runner-test
+#      - runner-test
+      - runner-test-1
+      - runner-test-2
 jobs:
-  runner-test:
-    machine: true
-    resource_class: abeyuki/circleci
+#  runner-test:
+#    machine: true
+#    resource_class: abeyuki/circleci
+#    steps:
+#      - run: echo "Hi I'm on Runners!" > $HOME/test.txt
+  runner-test-1:
+    docker:
+      - image: 'cimg/base:stable'
     steps:
-      - run: echo "Hi I'm on Runners!" > $HOME/test.txt
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: tests/nginx-deployment/deployment.yaml
+          resource-name: deployment/nginx-deployment
+          show-kubectl-command: true
