@@ -29,7 +29,7 @@ workflows:
 #
 jobs:
   runner-test:
-    resource_class: abeyuki/circleci
+    #resource_class: abeyuki/circleci
     kubernetes:
       - image: gcr.io/kaniko-project/executor:debug
         auth:
