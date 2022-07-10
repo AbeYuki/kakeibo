@@ -1,6 +1,28 @@
 version: 2.1
 orbs: 
   kubernetes: circleci/kubernetes@1.3.0
+executors:
+  default:
+    docker:
+      - image: 'cimg/base:stable'
+commands:
+  setup_kubectl:
+    step:
+      - run:
+          name: "kubectl install"
+          command: |
+              curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.0/bin/linux/arm64/kubectl
+              chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin/kubectl
+              kubectl version --client
+  setup_kubeconfig:
+    step:
+      - run:
+          name: "kubeconfig"
+          command: |
+              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
+              kubectl config use-context ${CONTEXT_NAME}
+
 workflows:
   testing:
     jobs:
@@ -14,33 +36,25 @@ workflows:
           context: kaniko
           requires:
             - status
+
 jobs:
   create-update:
     resource_class: abeyuki/circleci
-    docker:
-      - image: 'cimg/base:stable'
+    executor:
+      name: default
     steps:
       - checkout
-      - run:
-          name: "kubectl install"
-          command: |
-              curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.0/bin/linux/arm64/kubectl
-              chmod +x ./kubectl
-              sudo mv ./kubectl /usr/local/bin/kubectl
-              kubectl version --client
-      - run:
-          name: "kubeconfig"
-          command: |
-              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
-              kubectl config use-context ${CONTEXT_NAME}
+      - setup_kubectl
+      - setup_kubeconfig
       - kubernetes/create-or-update-resource:
           kustomize: true
           resource-file-path: kubernetes/overlay/prod
           show-kubectl-command: true
+
   status:
     resource_class: abeyuki/circleci
-    docker:
-      - image: 'cimg/base:stable'
+    executor:
+      name: default
     steps:
       - checkout
       - run:
@@ -52,24 +66,15 @@ jobs:
                   else echo NG ; sleep 3 
                   fi
               done
+
   delete:
     resource_class: abeyuki/circleci
-    docker:
-      - image: 'cimg/base:stable'
+    executor:
+      name: default
     steps:
       - checkout
-      - run:
-          name: "kubectl install"
-          command: |
-              curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.0/bin/linux/arm64/kubectl
-              chmod +x ./kubectl
-              sudo mv ./kubectl /usr/local/bin/kubectl
-              kubectl version --client
-      - run:
-          name: "kubeconfig"
-          command: |
-              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
-              kubectl config use-context ${CONTEXT_NAME}
+      - setup_kubectl
+      - setup_kubeconfig
       - kubernetes/delete-resource:
           kustomize: true
           now: true
