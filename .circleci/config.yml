@@ -14,11 +14,19 @@ jobs:
   runner-test:
     machine: true
     resource_class: abeyuki/circleci
+    docker:
+      - image: cimg/base:2021.11
+        auth:
+          username: abeyuki
+          password: $DOCKERHUB_PASSWORD
     steps:
       - run: 
           name: "KUBECONFIG"
           command: |
-            echo "${KUECONFIG}" > $HOME/test.txt
+            echo 'export PATH=/path/to/foo/bin:$PATH' >> $BASH_ENV
+            echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
+            source $BASH_ENV
+            echo ${KUECONFIG}
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
