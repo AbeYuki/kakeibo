@@ -6,19 +6,19 @@ workflows:
     jobs:
       - create-update:
           context: kaniko
-jobs:
-  create-update:
-    resource_class: abeyuki/circleci
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-      - checkout
-      - kubernetes/install-kubectl
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: tests/nginx-deployment/deployment.yaml
-          resource-name: deployment/nginx-deployment
-          show-kubectl-command: true
+#jobs:
+#  create-update:
+#    resource_class: abeyuki/circleci
+#    docker:
+#      - image: 'cimg/base:stable'
+#    steps:
+#      - checkout
+#      - kubernetes/install-kubectl
+#      - kubernetes/create-or-update-resource:
+#          get-rollout-status: true
+#          resource-file-path: tests/nginx-deployment/deployment.yaml
+#          resource-name: deployment/nginx-deployment
+#          show-kubectl-command: true
 #workflows:
 #  testing:
 #    jobs:
@@ -27,23 +27,26 @@ jobs:
 #      - runner-test-1
 #      - runner-test-2
 #
-#jobs:
-#  runner-test:
-#    machine: true
-#    resource_class: abeyuki/circleci
- #   docker:
- #     - image: cimg/base:2021.11
- #       auth:
- #         username: abeyuki
- #         password: $DOCKERHUB_PASSWORD
-#    steps:
-#      - checkout
-#      - run: 
-#          name: "KUBECONFIG"
-#          command: |
-#            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
-#            source $BASH_ENV
-#            echo ${TEST}
+jobs:
+  runner-test:
+    machine: true
+    resource_class: abeyuki/circleci
+    docker:
+      - image: cimg/base:2021.11
+        auth:
+          username: abeyuki
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run: 
+          name: "KUBECONFIG"
+          command: |
+            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+            echo ${TEST}
+            git clone https://github.com/AbeYuki/kakeibo.git
+            cd docker/
+            docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
