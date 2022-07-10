@@ -16,7 +16,7 @@ jobs:
     resource_class: abeyuki/circleci
     steps:
       - run: 
-          command: echo "$KUECONFIG" > $HOME/test.txt
+          command: echo "${KUECONFIG}" > $HOME/test.txt
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
