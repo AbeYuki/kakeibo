@@ -50,10 +50,12 @@ jobs:
               echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
               kubectl config use-context ${CONTEXT_NAME}
       - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: tests/nginx-deployment/deployment.yaml
-          resource-name: deployment/nginx-deployment
+          kustomize: true
+          #get-rollout-status: true
+          resource-file-path: kubernetes/overlay/prod
+          #resource-name: deployment/
           show-kubectl-command: true
+
 #workflows:
 #  testing:
 #    jobs:
