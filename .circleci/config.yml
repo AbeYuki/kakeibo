@@ -4,6 +4,8 @@ orbs:
 workflows: null
 jobs:
   create-update:
+    machine: true
+    resource_class: abeyuki/circleci
     docker:
       - image: 'cimg/base:stable'
     steps:
