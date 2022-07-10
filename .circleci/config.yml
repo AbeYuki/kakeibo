@@ -4,23 +4,26 @@ orbs:
 workflows:
   testing:
     jobs:
-#      - runner-test
-      - runner-test-1
+      - runner-test
+#      - runner-test-1
 #      - runner-test-2
 jobs:
-#  runner-test:
-#    machine: true
-#    resource_class: abeyuki/circleci
-#    steps:
-#      - run: echo "Hi I'm on Runners!" > $HOME/test.txt
-  runner-test-1:
-    docker:
-      - image: 'cimg/base:stable'
+  runner-test:
+    machine: true
+    resource_class: abeyuki/circleci
     steps:
-      - checkout
-      - kubernetes/install-kubectl
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: tests/nginx-deployment/deployment.yaml
-          resource-name: deployment/nginx-deployment
-          show-kubectl-command: true
+      - run: |
+        mkdir $HOME/.kube
+        echo "$KUBECONFIG" > $HOME/.kube/config
+        kubectl get pod -n all
+#  runner-test-1:
+#    docker:
+#      - image: 'cimg/base:stable'
+#    steps:
+#      - checkout
+#      - kubernetes/install-kubectl
+#      - kubernetes/create-or-update-resource:
+#          get-rollout-status: true
+#          resource-file-path: tests/nginx-deployment/deployment.yaml
+#          resource-name: deployment/nginx-deployment
+#          show-kubectl-command: true
