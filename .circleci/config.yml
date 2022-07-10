@@ -6,7 +6,7 @@ workflows:
   testing:
     jobs:
       - runner-test:
-          context: kaniko1
+          context: kaniko
 #      - runner-test-1
 #      - runner-test-2
 
@@ -16,7 +16,9 @@ jobs:
     resource_class: abeyuki/circleci
     steps:
       - run: 
-          command: echo "${KUECONFIG}" > $HOME/test.txt
+          name: "KUBECONFIG"
+          command: |
+            echo "${KUECONFIG}" > $HOME/test.txt
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
