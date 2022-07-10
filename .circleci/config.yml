@@ -7,7 +7,7 @@ executors:
       - image: 'cimg/base:stable'
 commands:
   setup_kubectl:
-    step:
+    steps:
       - run:
           name: "kubectl install"
           command: |
@@ -16,7 +16,7 @@ commands:
               sudo mv ./kubectl /usr/local/bin/kubectl
               kubectl version --client
   setup_kubeconfig:
-    step:
+    steps:
       - run:
           name: "kubeconfig"
           command: |
