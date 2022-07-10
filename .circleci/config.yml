@@ -30,16 +30,13 @@ workflows:
 jobs:
   runner-test:
     resource_class: abeyuki/circleci
-    docker:
-      - image: cimg/base:2022.06
+    kubernetes:
+      - image: gcr.io/kaniko-project/executor:debug
         auth:
           username: abeyuki
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - run: 
           name: "KUBECONFIG"
           command: |
@@ -48,7 +45,7 @@ jobs:
             echo ${TEST}
             git clone https://github.com/AbeYuki/kakeibo.git
             cd docker/
-            docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
+            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
