@@ -1,12 +1,15 @@
 version: 2.1
 orbs: 
   kubernetes: circleci/kubernetes@1.3.0
+
 workflows:
   testing:
     jobs:
-      - runner-test
+      - runner-test:
+          context: kaniko
 #      - runner-test-1
 #      - runner-test-2
+
 jobs:
   runner-test:
     machine: true
