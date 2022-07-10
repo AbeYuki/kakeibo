@@ -8,7 +8,7 @@ workflows:
 #          context: kaniko
       - create-update:
           context: kaniko
-jobs:
+#jobs:
 #  runner-test:
 #    machine: true
 #    resource_class: abeyuki/circleci
