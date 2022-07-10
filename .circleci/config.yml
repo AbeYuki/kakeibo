@@ -51,9 +51,9 @@ jobs:
               kubectl config use-context ${CONTEXT_NAME}
       - kubernetes/create-or-update-resource:
           kustomize: true
-          #get-rollout-status: true
+          get-rollout-status: true
           resource-file-path: kubernetes/overlay/prod
-          #resource-name: deployment/
+          resource-name: deployment/prod-kakeibo-frontend-app01-001
           show-kubectl-command: true
 
 #workflows:
