@@ -72,5 +72,4 @@ jobs:
           kustomize: true
           now: true
           resource-file-path: kubernetes/overlay/prod
-          resource-name: deployment.apps/prod-kakeibo-frontend-app01-001
           wait: true
