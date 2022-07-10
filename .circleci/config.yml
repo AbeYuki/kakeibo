@@ -44,6 +44,8 @@ jobs:
               chmod +x ./kubectl
               sudo mv ./kubectl /usr/local/bin/kubectl
               kubectl version --client
+      - kubernetes/install-kubeconfig:
+          kubeconfig: KUBECONFIG_DATA
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: tests/nginx-deployment/deployment.yaml
