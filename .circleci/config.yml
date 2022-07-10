@@ -6,7 +6,7 @@ workflows:
   testing:
     jobs:
       - runner-test:
-          context: kaniko
+          context: kaniko1
 #      - runner-test-1
 #      - runner-test-2
 
