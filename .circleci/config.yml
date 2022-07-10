@@ -47,7 +47,7 @@ jobs:
       - run:
           name: "kubeconfig"
           command: |
-              echo ${KUBECONFIG_DATA} | base64 -d > ${KUBECONFIG}
+              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
               kubectl config use-context ${CONTEXT_NAME}
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
