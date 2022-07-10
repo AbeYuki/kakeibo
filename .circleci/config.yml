@@ -4,43 +4,45 @@ orbs:
 workflows:
   testing:
     jobs:
-      - runner-test:
+#      - runner-test:
+#          context: kaniko
+      - create-update:
           context: kaniko
 jobs:
-  runner-test:
-    machine: true
-    resource_class: abeyuki/circleci
-    kubernetes:
-      - image: gcr.io/kaniko-project/executor:debug
-        auth:
-          username: abeyuki
-          password: $DOCKERHUB_PASSWORD
-    steps:
-      - checkout
-      - run: 
-          name: "KUBECONFIG"
-          command: |
-            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
-            source $BASH_ENV
-            echo ${TEST}
-            echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-            git clone https://github.com/AbeYuki/kakeibo.git
-            cd docker/
-            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
-
-#jobs:
-#  create-update:
+#  runner-test:
+#    machine: true
 #    resource_class: abeyuki/circleci
 #    docker:
-#      - image: 'cimg/base:stable'
+#      - image: gcr.io/kaniko-project/executor:debug
+#        auth:
+#          username: abeyuki
+#          password: $DOCKERHUB_PASSWORD
 #    steps:
 #      - checkout
-#      - kubernetes/install-kubectl
-#      - kubernetes/create-or-update-resource:
-#          get-rollout-status: true
-#          resource-file-path: tests/nginx-deployment/deployment.yaml
-#          resource-name: deployment/nginx-deployment
-#          show-kubectl-command: true
+#      - run: 
+#          name: "KUBECONFIG"
+#          command: |
+#            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
+#            source $BASH_ENV
+#            echo ${TEST}
+#            echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+#            git clone https://github.com/AbeYuki/kakeibo.git
+#            cd docker/
+#            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
+
+jobs:
+  create-update:
+    resource_class: abeyuki/circleci
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: tests/nginx-deployment/deployment.yaml
+          resource-name: deployment/nginx-deployment
+          show-kubectl-command: true
 #workflows:
 #  testing:
 #    jobs:
