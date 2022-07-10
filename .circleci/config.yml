@@ -37,6 +37,7 @@ jobs:
           show-kubectl-command: true
 jobs:
   status:
+    resource_class: abeyuki/circleci
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -52,6 +53,7 @@ jobs:
             done
 jobs:
   delete:
+    resource_class: abeyuki/circleci
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -74,22 +76,3 @@ jobs:
           resource-file-path: kubernetes/overlay/prod
           resource-name: deployment.apps/prod-kakeibo-frontend-app01-001
           wait: true
-#workflows:
-#  testing:
-#    jobs:
-#      - runner-test:
-#          context: kaniko
-#      - runner-test-1
-#      - runner-test-2
-#
-#  runner-test-1:
-#    docker:
-#      - image: 'cimg/base:stable'
-#    steps:
-#      - checkout
-#      - kubernetes/install-kubectl
-#      - kubernetes/create-or-update-resource:
-#          get-rollout-status: true
-#          resource-file-path: tests/nginx-deployment/deployment.yaml
-#          resource-name: deployment/nginx-deployment
-#          show-kubectl-command: true
