@@ -37,7 +37,13 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - checkout
-      - kubernetes/install-kubectl
+      - run:
+          name: "kubectl install"
+            command: |
+                curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.0/bin/linux/arm64/kubectl
+                chmod +x ./kubectl
+                sudo mv ./kubectl /usr/local/bin/kubectl
+                kubectl version --client
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: tests/nginx-deployment/deployment.yaml
