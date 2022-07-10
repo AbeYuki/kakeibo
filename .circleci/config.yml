@@ -6,6 +6,28 @@ workflows:
     jobs:
       - runner-test:
           context: kaniko
+jobs:
+  runner-test:
+    machine: true
+    resource_class: abeyuki/circleci
+    kubernetes:
+      - image: gcr.io/kaniko-project/executor:debug
+        auth:
+          username: abeyuki
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run: 
+          name: "KUBECONFIG"
+          command: |
+            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+            echo ${TEST}
+            echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+            git clone https://github.com/AbeYuki/kakeibo.git
+            cd docker/
+            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
+
 #jobs:
 #  create-update:
 #    resource_class: abeyuki/circleci
@@ -27,25 +49,6 @@ workflows:
 #      - runner-test-1
 #      - runner-test-2
 #
-jobs:
-  runner-test:
-    #resource_class: abeyuki/circleci
-    kubernetes:
-      - image: gcr.io/kaniko-project/executor:debug
-        auth:
-          username: abeyuki
-          password: $DOCKERHUB_PASSWORD
-    steps:
-      - checkout
-      - run: 
-          name: "KUBECONFIG"
-          command: |
-            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
-            source $BASH_ENV
-            echo ${TEST}
-            git clone https://github.com/AbeYuki/kakeibo.git
-            cd docker/
-            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
