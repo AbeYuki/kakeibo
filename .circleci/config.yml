@@ -35,7 +35,6 @@ jobs:
           resource-file-path: kubernetes/overlay/prod
           resource-name: deployment.apps/prod-kakeibo-frontend-app01-001
           show-kubectl-command: true
-jobs:
   status:
     resource_class: abeyuki/circleci
     docker:
@@ -51,7 +50,6 @@ jobs:
                   else echo NG ; sleep 3 
                   fi
               done
-jobs:
   delete:
     resource_class: abeyuki/circleci
     docker:
