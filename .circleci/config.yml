@@ -23,8 +23,7 @@ jobs:
       - run: 
           name: "KUBECONFIG"
           command: |
-            echo 'export PATH=/path/to/foo/bin:$PATH' >> $BASH_ENV
-            echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
+            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
             source $BASH_ENV
             echo ${KUECONFIG}
 #  runner-test-1:
