@@ -4,32 +4,12 @@ orbs:
 workflows:
   testing:
     jobs:
-#      - runner-test:
-#          context: kaniko
       - create-update:
           context: kaniko
-#jobs:
-#  runner-test:
-#    machine: true
-#    resource_class: abeyuki/circleci
-#    docker:
-#      - image: gcr.io/kaniko-project/executor:debug
-#        auth:
-#          username: abeyuki
-#          password: $DOCKERHUB_PASSWORD
-#    steps:
-#      - checkout
-#      - run: 
-#          name: "KUBECONFIG"
-#          command: |
-#            echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
-#            source $BASH_ENV
-#            echo ${TEST}
-#            echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-#            git clone https://github.com/AbeYuki/kakeibo.git
-#            cd docker/
-#            /kaniko/executor --context docker buildx build --platform linux/amd64,linux/arm64/v8 -t abeyuki/django:circleci --push .
-
+      - status:
+          context: kaniko
+      - delete:
+          context: kaniko
 jobs:
   create-update:
     resource_class: abeyuki/circleci
@@ -53,9 +33,47 @@ jobs:
           kustomize: true
           get-rollout-status: true
           resource-file-path: kubernetes/overlay/prod
-          resource-name: deployment/prod-kakeibo-frontend-app01-001
+          resource-name: deployment.apps/prod-kakeibo-frontend-app01-001
           show-kubectl-command: true
-
+jobs:
+  status:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+    - run:
+      name: "status check"
+        command: |
+            while true ;do 
+                if [[ $(kubectl get pods -n prod-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
+                    echo OK ; break 
+                else echo NG ; sleep 3 
+                fi
+            done
+jobs:
+  delete:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - run:
+          name: "kubectl install"
+          command: |
+              curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.24.0/bin/linux/arm64/kubectl
+              chmod +x ./kubectl
+              sudo mv ./kubectl /usr/local/bin/kubectl
+              kubectl version --client
+      - run:
+          name: "kubeconfig"
+          command: |
+              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
+              kubectl config use-context ${CONTEXT_NAME}
+      - kubernetes/delete-resource:
+          kustomize: true
+          now: true
+          resource-file-path: kubernetes/overlay/prod
+          resource-name: deployment.apps/prod-kakeibo-frontend-app01-001
+          wait: true
 #workflows:
 #  testing:
 #    jobs:
