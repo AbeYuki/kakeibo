@@ -42,15 +42,15 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - checkout
-    - run:
-        name: "status check"
-        command: |
-            while true ;do 
-                if [[ $(kubectl get pods -n prod-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
-                    echo OK ; break 
-                else echo NG ; sleep 3 
-                fi
-            done
+      - run:
+          name: "status check"
+          command: |
+              while true ;do 
+                  if [[ $(kubectl get pods -n prod-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
+                      echo OK ; break 
+                  else echo NG ; sleep 3 
+                  fi
+              done
 jobs:
   delete:
     resource_class: abeyuki/circleci
