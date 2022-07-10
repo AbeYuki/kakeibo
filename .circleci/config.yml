@@ -10,6 +10,10 @@ workflows:
           context: kaniko
       - delete:
           context: kaniko
+          requires:
+            - create-update
+            - status
+            - delete
 jobs:
   create-update:
     resource_class: abeyuki/circleci
