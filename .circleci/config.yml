@@ -13,11 +13,7 @@ jobs:
     resource_class: abeyuki/circleci
     steps:
       - run: 
-        name: kubeconfig
-        command: |
-          mkdir $HOME/.kube
-          echo "$KUBECONFIG" > $HOME/.kube/config
-          kubectl get pod -n all
+          command: echo "$KUECONFIG" > $HOME/test.txt
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
