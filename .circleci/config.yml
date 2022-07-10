@@ -20,12 +20,13 @@ jobs:
  #         username: abeyuki
  #         password: $DOCKERHUB_PASSWORD
     steps:
+      - checkout
       - run: 
           name: "KUBECONFIG"
           command: |
             echo 'export PATH=/bin/bash:$PATH' >> $BASH_ENV
             source $BASH_ENV
-            echo ${KUECONFIG}
+            echo ${TEST}
 #  runner-test-1:
 #    docker:
 #      - image: 'cimg/base:stable'
