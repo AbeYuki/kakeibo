@@ -47,7 +47,7 @@ jobs:
       - run:
           name: "kubeconfig"
           command: |
-              echo -n "${KUBECONFIG_DATA}" > ~/.kube/config
+              echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: tests/nginx-deployment/deployment.yaml
