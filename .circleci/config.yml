@@ -29,15 +29,17 @@ workflows:
 #
 jobs:
   runner-test:
-    machine: true
     resource_class: abeyuki/circleci
     docker:
-      - image: cimg/base:2021.11
+      - image: cimg/base:2022.06
         auth:
           username: abeyuki
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run: 
           name: "KUBECONFIG"
           command: |
