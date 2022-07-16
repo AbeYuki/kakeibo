@@ -48,7 +48,7 @@ jobs:
       - setup_kubeconfig
       - kubernetes/create-or-update-resource:
           kustomize: true
-          resource-file-path: kubernetes/overlay/prod
+          resource-file-path: kubernetes/overlay/testing
           show-kubectl-command: true
 
   status:
@@ -61,7 +61,7 @@ jobs:
           name: "status check"
           command: |
               while true ;do 
-                  if [[ $(kubectl get pods -n prod-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
+                  if [[ $(kubectl get pods -n testing-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
                       echo OK ; break 
                   else echo NG ; sleep 3 
                   fi
@@ -78,5 +78,5 @@ jobs:
       - kubernetes/delete-resource:
           kustomize: true
           now: true
-          resource-file-path: kubernetes/overlay/prod
+          resource-file-path: kubernetes/overlay/testing
           wait: true
