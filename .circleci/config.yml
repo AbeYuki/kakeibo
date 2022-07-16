@@ -20,6 +20,7 @@ commands:
       - run:
           name: "kubeconfig"
           command: |
+              mkdir -p ~/.kube/
               echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
               kubectl config use-context ${CONTEXT_NAME}
 
