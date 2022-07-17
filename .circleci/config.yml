@@ -1,6 +1,33 @@
 version: 2.1
 orbs: 
   kubernetes: circleci/kubernetes@1.3.0
+
+workflows:
+  testing:
+    jobs:
+      - create-update:
+          context: kaniko
+          filters:
+            branches:
+              only: 
+                - testing
+      - status:
+          context: kaniko
+          requires:
+            - create-update
+          filters:
+            branches:
+              only: 
+                - testing
+      - delete:
+          context: kaniko
+          requires:
+            - status
+          filters:
+            branches:
+              only: 
+                - testing
+  
 executors:
   default:
     docker:
@@ -23,20 +50,6 @@ commands:
               mkdir -p ~/.kube/
               echo -n "${KUBECONFIG_DATA}" | base64 -d > ~/.kube/config
               kubectl config use-context ${CONTEXT_NAME}
-
-workflows:
-  testing:
-    jobs:
-      - create-update:
-          context: kaniko
-      - status:
-          context: kaniko
-          requires:
-            - create-update
-      - delete:
-          context: kaniko
-          requires:
-            - status
 
 jobs:
   create-update:
