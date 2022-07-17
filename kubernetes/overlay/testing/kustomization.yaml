@@ -57,6 +57,13 @@ patchesStrategicMerge:
     storageClassName: longhorn
     volumeMode: Filesystem
 - |-
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: frontend-app01
+  spec:
+    type: NodePort
+- |-
   apiVersion: apps/v1
   kind: Deployment
   metadata:
