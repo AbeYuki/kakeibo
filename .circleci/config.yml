@@ -7,20 +7,26 @@ workflows:
     jobs:
       - create-update:
           context: kaniko
-          branches:
-            only: testing
+          filters:
+            branches:
+              only: 
+                - testing
       - status:
           context: kaniko
           requires:
             - create-update
-          branches:
-            only: testing
+          filters:
+            branches:
+              only: 
+                - testing
       - delete:
           context: kaniko
           requires:
             - status
-          branches:
-            only: testing
+          filters:
+            branches:
+              only: 
+                - testing
   
 executors:
   default:
