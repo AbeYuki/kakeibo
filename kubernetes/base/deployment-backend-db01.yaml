@@ -93,11 +93,11 @@ spec:
             secretKeyRef:
               name: kustomize-password
               key: password
-        -name: PGDATA
+        - name: PGDATA
           valueFrom:
             configMapKeyRef:
               name: configmap-django-variable01
-              key: PGDATA        
+              key: PGDATA
         ports:
         - containerPort: 5432
           name: backend-db01
