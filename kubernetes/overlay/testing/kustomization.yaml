@@ -90,7 +90,7 @@ patchesStrategicMerge:
             __EOF__
             }
             function settigs_local_database (){
-            expor POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
+            export POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
             cat <<__EOF__>> /code/project/settings_local.py
             DATABASES = {
                 'default': {
