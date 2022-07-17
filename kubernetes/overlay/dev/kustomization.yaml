@@ -82,7 +82,7 @@ patchesStrategicMerge:
             SECRET_KEY = '$Secret_Key'
             __EOF__
             }
-            function settigs_local_database (){
+            function settings_local_database (){
             export POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
             cat <<__EOF__>> /code/project/settings_local.py
             DATABASES = {
@@ -119,7 +119,7 @@ patchesStrategicMerge:
                 Clone \
                 && create_secret_key \
                 && setting_local_secret \
-                && settigs_local_database \
+                && settings_local_database \
                 && connection_check \
                 && module_fix \
                 && Runserver
