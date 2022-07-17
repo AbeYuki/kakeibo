@@ -1,5 +1,5 @@
 # Status
-[![CircleCI](https://circleci.com/gh/AbeYuki/kakeibo.svg?style=svg)](https://github.com/AbeYuki/kakeibo)
+[![CircleCI](https://circleci.com/gh/AbeYuki/kakeibo.svg?style=shield)](https://github.com/AbeYuki/kakeibo/?branch=testing)
 
 # 家計簿 web app 
 ![kakeibo UI](./docs/example/kakeibo-ui.png)
