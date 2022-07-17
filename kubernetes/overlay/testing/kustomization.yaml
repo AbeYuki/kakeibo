@@ -85,13 +85,12 @@ patchesStrategicMerge:
             print(get_random_secret_key())")
             }
             function setting_local_secret (){
-            cat <<EOF> /code/project/settings_local.py
+            cat <<__EOF__> /code/project/settings_local.py
             SECRET_KEY = '$Secret_Key'
-            EOF
-            }
+            __EOF__
             function settigs_local_database (){
-            POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
-            cat <<EOF>> /code/project/settings_local.py
+            expor POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
+            cat <<__EOF__>> /code/project/settings_local.py
             DATABASES = {
                 'default': {
                     'ENGINE': 'django.db.backends.postgresql',
@@ -102,7 +101,7 @@ patchesStrategicMerge:
                     'PORT': 5432,
                 }
             }
-            EOF
+            __EOF__
             }
             function connection_check (){
                 while true; do

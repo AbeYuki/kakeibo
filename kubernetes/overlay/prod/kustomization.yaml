@@ -70,32 +70,31 @@ patchesStrategicMerge:
           args:
           - |
             function Clone (){
-              git clone https://github.com/AbeYuki/kakeibo.git /codetmp && cp -a /codetmp/* /code
+              git clone https://github.com/AbeYuki/kakeibo.git /codetmp && cp -a /codetmp/* /code/
             }
             function create_secret_key (){
-            Secret_Key=$(python -c "
+            Secret_Key=$(python3 -c "
             from django.core.management.utils import get_random_secret_key
             print(get_random_secret_key())")
             }
             function setting_local_secret (){
-            cat <<EOF> /code/project/settings_local.py
+            cat <<__EOF__> /code/project/settings_local.py
             SECRET_KEY = '$Secret_Key'
-            EOF
-            }
+            __EOF__
             function settigs_local_database (){
-            POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//') \
-            && cat <<EOF>> /code/project/settings_local.py
+            expor POSTGRES_HOST=$(env | egrep -i backend_db.*service.*host | awk -F '=' '{print $1}' | tr 'A-Z' 'a-z'  | tr '_' '-' | sed  's/-service-host//')
+            cat <<__EOF__>> /code/project/settings_local.py
             DATABASES = {
                 'default': {
                     'ENGINE': 'django.db.backends.postgresql',
-                    'NAME': '$POSTGRES_NAME',
-                    'USER': '$POSTGRES_USER',
-                    'PASSWORD': '$POSTGRES_PASSWORD',
-                    'HOST': '$POSTGRES_HOST',
+                    'NAME': '${POSTGRES_NAME}',
+                    'USER': '${POSTGRES_USER}',
+                    'PASSWORD': '${POSTGRES_PASSWORD}',
+                    'HOST': '${POSTGRES_HOST}',
                     'PORT': 5432,
                 }
             }
-            EOF
+            __EOF__
             }
             function connection_check (){
                 while true; do

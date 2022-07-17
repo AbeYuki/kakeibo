@@ -3,7 +3,7 @@ kind: LabelTransformer
 metadata:
   name: labels-transformer
 labels:
-  environment: development
+  environment: testing
   app.kubernetes.io/part-of: django
   app.kubernetes.io/managed-by: github
   app.kubernetes.io/created-by: controller-manager
