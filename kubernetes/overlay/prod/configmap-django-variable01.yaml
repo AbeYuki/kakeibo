@@ -6,4 +6,5 @@ data:
   POSTGRES_NAME: postgres
   POSTGRES_USER: postgres
   POSTGRES_DB: postgres
+  PGDATA: "/var/lib/postgresql/data/pgdata"
   DEBUG: "1"
