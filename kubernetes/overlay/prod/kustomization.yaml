@@ -73,7 +73,7 @@ patchesStrategicMerge:
               if [ -d /code/.git ]; then
                 git -c /code pull origin main
               elif [! -d /code/.git ]; then
-                  git clone https://github.com/AbeYuki/kakeibo.git /code
+                  rm -rdf /code/ && git clone https://github.com/AbeYuki/kakeibo.git /code
               else
                 echo "clone error" ; break
               fi
