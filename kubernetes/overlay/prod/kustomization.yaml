@@ -70,13 +70,7 @@ patchesStrategicMerge:
           args:
           - |
             function Clone (){
-              if [ -d /code/.git ]; then
-                git -c /code pull origin main
-              elif [! -d /code/.git ]; then
-                  rm -rdf /code/ && git clone https://github.com/AbeYuki/kakeibo.git /code
-              else
-                echo "clone error" ; break
-              fi
+              git clone https://github.com/AbeYuki/kakeibo.git /tmp && cp -a /tmp/* /code/
             }
             function create_secret_key (){
             Secret_Key=$(python -c "
