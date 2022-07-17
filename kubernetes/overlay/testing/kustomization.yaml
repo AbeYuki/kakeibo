@@ -77,7 +77,7 @@ patchesStrategicMerge:
           args:
           - |
             function Clone (){
-              git clone https://github.com/AbeYuki/kakeibo.git /codetmp && cp -a /codetmp/* /code
+              git clone https://github.com/AbeYuki/kakeibo.git /codetmp && cp -a /codetmp/* /code/
             }
             function create_secret_key (){
             Secret_Key=$(python -c "
