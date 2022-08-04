@@ -74,12 +74,14 @@ jobs:
       - run:
           name: "status check"
           command: |
-              while true ;do 
-                  if [[ $(kubectl get pods -n testing-kakeibo --field-selector=status.phase=Running | awk 'NR>1 {print$3}') ==  Running* ]] ;then 
-                      echo OK ; break 
-                  else echo NG ; sleep 3 
-                  fi
-              done
+            ns=testing-kakeibo
+            count=2
+            while true ;do 
+                if [[ $(kubectl get pods -n $ns --field-selector=status.phase=Running | awk 'NR>1 {print$3}' | wc -l) -ge ${count} ]] ;then 
+                    echo "pod status OK" ; sleep 3 ; break 
+                else echo "pod status NG" ; sleep 3
+                fi
+            done
 
   delete:
     resource_class: abeyuki/circleci
